@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Food</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Centering the form with good spacing */
+        form {
+            max-width: 400px;
+            background-color: white;
+            padding: 20px;
+            margin: 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .menu-item {
+            margin-bottom: 20px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Styling the checkbox */
+        .menu-item input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        /* Styling the submit button */
+        form input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* Info Section and Footer */
+        .info-section {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .info-section h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            form {
+                width: 90%;
+            }
+
+            .menu-item {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Order Food from {{ restaurant.name }}</h1>
+    <form method="POST">
+        {% for item in restaurant.menu %}
+        <div class="menu-item">
+            <input type="checkbox" name="food_items" value="{{ item.name }}"> {{ item.name }} - ${{ item.price }}
+        </div>
+        {% endfor %}
+        <input type="submit" value="Order">
+    </form>
+
+    <!-- Our Services Section -->
+    <div class="info-section">
+        <h2>Our Services</h2>
+        <p>We offer seamless table reservations at the best restaurants.</p>
+        <p>Enjoy a hassle-free experience with online food ordering.</p>
+        <p>Secure online payment options for your convenience.</p>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 Restaurant Reservation System. All rights reserved.</p>
+    </div>
+</body>
+</html>

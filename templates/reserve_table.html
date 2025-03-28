@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserve a Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f4f4;
+        }
+
+        /* Adding background image with low opacity */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='images/Table.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            opacity: 0.5; /* Adjust opacity here */
+            z-index: -1;
+        }
+
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        form {
+            max-width: 400px;
+            background-color: white;
+            padding: 20px;
+            margin: 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            z-index: 1; /* Ensure form is on top of the background */
+        }
+
+        form label {
+            font-weight: bold;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        form input, form select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        form input:focus, form select:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        form input[type="submit"] {
+            background-color: #000000;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .navbar {
+            text-align: center;
+            margin: 0;
+            padding: 19px 0;
+            background-color: #333;
+            z-index: 1;
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .info-section {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .info-section h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .branches {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .branch-item {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        .footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            margin-top: 0;
+            font-size: 14px;
+            z-index: 1;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        form {
+            z-index: 1;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            .restaurant-item {
+                width: 90%;
+            }
+
+            .navbar a {
+                font-size: 14px;
+            }
+
+            .branches {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/customer_home" class="dashboard">Home</a>
+        <a href="/customer_dashboard" class="dashboard">Dashboard</a>
+        <a href="/about" class="about">About Us</a> 
+        <a href="/contact" class="contact">Contact Us</a> 
+        <a href="/login" class="login">Logout</a> 
+    </div>
+    <h1>Reserve a Table </h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div>
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <label for="table_number">Table Number:</label>
+        <select id="table_number" name="table_number" required>
+            <option value="" disabled selected>Select a table</option>
+            {% for table in available_tables %}
+                <option value="{{ table }}">{{ table }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="date">Date:</label>
+        <input type="date" id="date" name="date" required>
+
+        <label for="time">Time:</label>
+        <input type="time" id="time" name="time" required>
+
+        <label for="persons">Number of Persons:</label>
+        <input type="number" id="persons" name="persons" required>
+
+        <input type="submit" value="Reserve">
+    </form>
+
+    <div class="info-section">
+        <h2>Our Services</h2>
+        <p>We offer seamless table reservations at the best restaurants.</p>
+        <p>Enjoy a hassle-free experience with online food ordering.</p>
+        <p>Secure online payment options for your convenience.</p>
+    </div>
+
+    <div class="info-section">
+        <h2>We are available in</h2>
+        <div class="branches">
+            <div class="branch-item">
+                <h3>Karminagar</h3>
+                <p>karimnagar city,Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Hyderabad</h3>
+                <p>Hyderabad,Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Thirupathi</h3>
+                <p>Chittor,AndraPradesh</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Restaurant Reservation System. All rights reserved.</p>
+    </div>
+</body>
+</html>

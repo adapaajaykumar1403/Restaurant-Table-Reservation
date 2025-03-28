@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            background-color: #e0f2f1;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h1 {
+            color: #004d40;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Centering the form with styling */
+        form {
+            max-width: 600px;
+            background-color: white;
+            padding: 20px;
+            margin: 30px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #004d40;
+        }
+
+        form input, form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease;
+        }
+
+        form input:focus, form textarea:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        form input[type="submit"] {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        img {
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Services and Branches Section */
+        .info-section {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .info-section h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .branches {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .branch-item {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            margin-top: 0px;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            form {
+                width: 90%;
+                padding: 15px;
+            }
+        }
+
+         /* Basic styling for the alert messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Success alert (green background) */
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+/* Error alert (red background) */
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Form container styling */
+form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Center container for flash message and form */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+    </style>
+</head>
+<body>
+    
+    
+    <img src="{{ url_for('static',filename='images/contact.jpeg')  }}" alt="free" posistion="center" height="200" width="300" >
+
+
+    <!-- Flash message for success -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div>
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+    <form method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="message">Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <input type="submit" value="Submit">
+    </form>
+    
+    <!-- Our Services Section -->
+    <div class="info-section">
+        <h2>Our Services</h2>
+        <p>We offer seamless table reservations at the best restaurants.</p>
+        <p>Enjoy a hassle-free experience with online food ordering.</p>
+        <p>Secure online payment options for your convenience.</p>
+    </div>
+
+    <!-- Our Branches Section -->
+    <div class="info-section">
+        <h2>We are available in</h2>
+        <div class="branches">
+            <div class="branch-item">
+                <h3>Karminagar</h3>
+                <p>karimnagar city,Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Hyderabad</h3>
+                <p>Hyderabad,Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Thirupathi</h3>
+                <p>Chittor,AndraPradesh</p>
+            </div>
+        </div>
+    </div>
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 Restaurant Reservation System. All rights reserved.</p>
+    </div>
+</body>
+</html>

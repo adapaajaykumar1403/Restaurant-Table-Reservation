@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+       body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #f4f4f4;
+        }
+
+        /* Adding background image with low opacity */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ url_for('static', filename='images/custdash.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            opacity: 1; /* Adjust opacity here */
+            z-index: -1;
+        }
+
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 40px;
+        }
+
+
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            margin-top: 40px;
+        }
+        /* Navbar Links */
+        .navbar {
+            text-align: center;
+            margin: 0;
+            padding: 20px 0;
+            background-color: rgba(0, 0, 0, 0.8); /* Make the navbar semi-transparent */
+        }
+
+        .navbar a {
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 15px;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-collapse: collapse;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #000000;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        td {
+            color: #555;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f4f4f4;
+        }
+
+        tr:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Services and Branches Section */
+        .info-section {
+            background-color: #333;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .info-section h2 {
+            margin-bottom: 20px;
+            font-size: 26px;
+        }
+
+        .info-section p {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .branches {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .branch-item {
+            background-color: #444;
+            padding: 20px;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            background-color: #222;
+            color: white;
+            padding: 20px 0;
+            margin-top: 0px;
+            font-size: 14px;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+        /* Basic styling for the alert messages */
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Success alert (green background) */
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+/* Error alert (red background) */
+.alert-danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}
+
+/* Form container styling */
+form {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Center container for flash message and form */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+/* Cancel button styling */
+.btn-cancel {
+            background-color: #1b1212;
+            color: rgb(255, 255, 255);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-cancel:hover {
+         background-color: #e63939;
+        }
+
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            table {
+                width: 90%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="navbar">
+        <a href="/admin_homepage" class="dashboard">Home</a>
+        <a href="/about" class="about">About Us</a> 
+        <a href="/contact" class="contact">Contact Us</a> 
+        <a href="/login" class="login">Logout</a> 
+    </div>
+    <h1>Welcome {{ session['username'] }},Your Booking Details</h1>
+      <!-- Flash message for success -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div>
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">
+              {{ message }}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <table>
+        <tr>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Table Number</th>
+            <th>Actions</th>
+        </tr>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.customer }}</td>
+            <td>{{ booking.date }}</td>
+            <td>{{ booking.time }}</td>
+            <td>{{ booking.table_number }}</td>
+            <td>
+                <form method="POST" action="/deallocate/{{ booking._id }}">
+                    <button type="submit" class="btn-cancel">Deallocate Table</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br><br><br>
+
+    <!-- Our Services Section -->
+    <div class="info-section">
+        <h2>Our Services</h2>
+        <p>We offer seamless table reservations at the best restaurants.</p>
+        <p>Enjoy a hassle-free experience with online food ordering.</p>
+        <p>Secure online payment options for your convenience.</p>
+    </div>
+
+    <!-- Our Branches Section -->
+    <div class="info-section">
+        <h2>We are available in</h2>
+        <div class="branches">
+            <div class="branch-item">
+                <h3>Karminagar</h3>
+                <p>Karimnagar city, Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Hyderabad</h3>
+                <p>Hyderabad, Telangana</p>
+            </div>
+            <div class="branch-item">
+                <h3>Thirupathi</h3>
+                <p>Chittoor, Andhra Pradesh</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <div class="footer">
+        <p>&copy; 2024 Restaurant Reservation System. All rights reserved.</p>
+    </div>
+</body>
+</html>

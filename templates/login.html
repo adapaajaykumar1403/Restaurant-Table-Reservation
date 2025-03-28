@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{{ url_for('static', filename='images/login.jpg') }}");
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Overlay to increase text visibility */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0); /* Dark overlay */
+            z-index: 0;
+        }
+
+        h1 {
+            color: rgb(0, 0, 0);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+            z-index: 1;
+            position: relative;
+        }
+
+        form {
+            width: 350px;
+            padding: 20px;
+            background-color:  rgba(255, 255, 255, 0.85); /* Slightly transparent background */
+            border-radius: 10px;
+            z-index: 1;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 5px;
+            text-align: left;
+            color: #1f1e1e;
+            font-weight: bold;
+        }
+
+        form input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        form input[type="submit"] {
+            background-color: #000000;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #093a7e;
+        }
+
+        .links {
+            margin-top: 10px;
+            z-index: 1;
+            position: relative;
+        }
+
+        .links a {
+            display: block;
+            color: rgb(255, 255, 255);
+            text-align: center;
+            margin-top: 10px;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }
+
+        .links p {
+            color: rgb(255, 255, 255);
+            font-size: 16px;
+        }
+
+        /* Alert message styling */
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        /* Center container for flash message and form */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-top: 50px;
+        }
+        
+        /* Error message styling */
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Login</h1>
+       <!-- Flash message for success -->
+       {% with messages = get_flashed_messages(with_categories=true) %}
+       {% if messages %}
+       <div>
+         {% for category, message in messages %}
+           <div class="alert alert-{{ category }}">
+             {{ message }}
+           </div>
+         {% endfor %}
+       </div>
+       {% endif %}
+       {% endwith %}
+       
+        <form method="POST" onsubmit="return validateForm()">
+
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+            <div id="usernameError" class="error-message"></div>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <div id="passwordError" class="error-message"></div>
+
+            <label for="role">Role:</label>
+            <select name="role" id="role">
+                <option value="customer">Customer</option>
+                <option value="restaurant">Restaurant</option>
+            </select>
+
+            <input type="submit" value="Login">
+        </form>
+
+        <div class="links">
+            <p>Don't have an account?</p>
+            <a href="/register">Register as Customer</a>
+            <a href="/register_rest">Register as Restaurant</a>
+        </div>
+    </div>
+
+    <script>
+        function validateForm() {
+            let valid = true;
+
+            // Get form values
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            // Clear error messages
+            document.getElementById('usernameError').innerHTML = '';
+            document.getElementById('passwordError').innerHTML = '';
+
+            // Validate username
+            if (username === '') {
+                document.getElementById('usernameError').innerHTML = 'Username is required.';
+                valid = false;
+            }
+
+            // Validate password
+            if (password === '') {
+                document.getElementById('passwordError').innerHTML = 'Password is required.';
+                valid = false;
+            } else if (password.length < 4) {
+                document.getElementById('passwordError').innerHTML = 'Password must be at least 4 characters long.';
+                valid = false;
+            }
+
+            return valid;
+        }
+    </script>
+</body>
+</html>
